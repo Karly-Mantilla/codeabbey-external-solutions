@@ -1,0 +1,5 @@
+
+average (x:xs) = takeaverage x 1 xs
+
+takeaverage x n [] = round (x/n)
+takeaverage x n (y:ys) = takeaverage (x+y) (n+1) ys

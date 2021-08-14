@@ -1,0 +1,51 @@
+(define car_zero
+  (λ (list)
+    (cond
+      [(zero? (car list)) '()]
+      [else (let* ([first (car list)]
+                   [rest (cdr list)])
+              (cons first (car_zero rest)))])))
+
+(define cdr_zero
+  (λ (list)
+    (cond
+      [(zero? (car list)) (cdr list)]
+      [else (cdr_zero (cdr list))])))
+
+(define SpiltZero
+  (λ (list)
+    (cond
+      [(null? list) '()]
+      [else (let([first (car_zero list)]
+                 [rest (cdr_zero list)])
+       (cons first (SpiltZero rest)))])))
+
+(define ArrayAverage
+  (λ (list)
+    (let* ([Array_Length (length list)]
+           [SUM (apply + list)])
+      (CommonRounding(/ SUM Array_Length)))))
+      
+(define DecimalOnly
+  (lambda (number)
+    (- number (truncate number))))
+    
+(define CommonRounding
+  (lambda (number)
+    (cond
+      [(= .5 (DecimalOnly number)) (+ (truncate number) 1)]
+      (else (round number)) )))
+
+      
+(define Driver1
+  (λ (fn list)
+    (cond
+      [(null? list) '()]
+      [else (let ([a (car list)]
+                  [rest (cdr list)])
+              (cons (fn a) (Driver1 fn rest)))])))
+
+(define DriveTill_0
+  (λ (fn list)
+    (let* ([ChunkedList (SpiltZero list)])
+      (Driver1 fn ChunkedList))))
