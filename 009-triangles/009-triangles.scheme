@@ -1,0 +1,18 @@
+(define Try
+  (lambda (a b c)
+  (cond
+    [(and
+      (> (+ a b) c)
+      (> (+ c a) b)
+      (> (+ b c) a))1]
+    (else 0))))
+  
+(define TriangleInquality
+  (lambda (Triples)
+    (cond
+      [(null? Triples) '()]
+      [else (let ([a (car Triples)]
+                  [b (car (cdr Triples))]
+                  [c (car (cdr (cdr Triples)))]
+                  [rest (cdr (cdr (cdr Triples)))])
+              (cons (Try a b c) (TriangleInquality rest)))])))
