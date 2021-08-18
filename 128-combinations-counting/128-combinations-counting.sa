@@ -1,0 +1,21 @@
+import Control.Monad
+
+
+main :: IO ()
+main = do
+  l0 <- getLine
+  ls <- replicateM (read l0) getLine
+  putStrLn $ unwords $ combinationsS <$> ls
+
+
+combinationsS :: String -> String
+combinationsS s = case read <$> words s of
+  [n, k] -> show $ combinations n k
+  _ -> "combinationsS: Parse Error."
+
+
+combinations :: Int -> Int -> Int
+combinations n k
+  | k >= d = quot (product [k + 1 .. n]) (product [1 .. d])
+  | otherwise = quot (product [d + 1 .. n]) (product [1 .. k])
+  where d = n - k
