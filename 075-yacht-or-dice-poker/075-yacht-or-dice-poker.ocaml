@@ -1,0 +1,19 @@
+let solve l =
+  let l' = String.split_on_char ' ' l |> List.map int_of_string in
+  if List.length l' != 5 then failwith "Invalid input"
+  else
+    let l'' = List.sort compare l' in
+    if is_small_straight l'' then "small-straight"
+    else if is_big_straight l'' then "big-straight"
+    else
+      let index_sorted = index l'' |> List.of_seq |> List.sort compare in
+      if List.length index_sorted == 1 then "yacht"
+      else
+        let twos = List.filter (fun x -> x == 2) index_sorted in
+        let threes = List.filter (fun x -> x == 3) index_sorted in
+        if List.length twos == 2 then "two-pairs"
+        else if List.length twos == 1 && List.length threes == 1 then "full-house"
+        else if List.length twos == 1 then "pair"
+        else if List.length threes == 1 then "three"
+        else if List.length index_sorted == 2 then "four"
+        else "none"

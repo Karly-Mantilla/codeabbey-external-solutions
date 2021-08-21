@@ -1,0 +1,28 @@
+import Data.List.Split(splitOn)
+import Data.List
+
+main = do
+    contents <- readFile "input75.txt"
+    let eingabe =  (map toIntQuintuple) . tail . lines $ contents
+    let ergebnis = fkt eingabe
+    let ausgabe = unwords ergebnis
+    writeFile "output75.txt" ausgabe 
+ 
+fkt :: [(Int,Int,Int,Int,Int)] -> [String]
+fkt [] = []
+fkt ((a,b,c,d,e):rest) 
+        | laenge == 1 = "yacht":(fkt rest)
+        | laenge == 2 && (length ((group numlist) !! 0) == 1 || length ((group numlist) !! 1) == 1) = "four":(fkt rest)
+        | laenge == 2 = "full-house":(fkt rest)
+        | laenge == 3 && (length ((group numlist) !! 0) == 2 || length ((group numlist) !! 1) == 2) = "two-pairs":(fkt rest)
+        | laenge == 3 = "three":(fkt rest)
+        | laenge == 4 = "pair":(fkt rest)
+        | laenge == 5 && 1 `elem` numlist = "small-straight":(fkt rest)
+        | otherwise = "big-straight":(fkt rest)
+        where numlist = sort [a,b,c,d,e]
+              laenge = length(nub numlist)
+
+toIntQuintuple :: String -> (Int,Int,Int,Int,Int)
+toIntQuintuple s = 
+        let a = (splitOn " " s) 
+        in ((read (a !! 0)),(read (a !! 1)),(read (a !! 2)),(read (a !! 3)),(read (a !! 4)))
