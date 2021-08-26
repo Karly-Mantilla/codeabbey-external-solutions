@@ -1,0 +1,15 @@
+main = do
+    n <- readLn :: IO Int
+    arr <- mapM (\x -> getLine) [1..n]
+    let pArr = (fmap.fmap) (read::String->Integer) $ map words arr
+    let t = map (\[a,b,n] -> mod' a b n) pArr
+    mapM (\x -> putStr $ (show x) ++ " ") t
+    putStrLn("")
+    return()
+
+
+mod' :: Integer -> Integer -> Integer -> Integer
+mod' a b m 
+        | (b == 0) = 1
+        | (b `mod` 2) == 0 = let t = (mod' a (b `div` 2) m) in (t*t) `mod` m 
+        | otherwise = let t = (mod' a (b `div` 2) m) in ((t*t)*a) `mod` m 
