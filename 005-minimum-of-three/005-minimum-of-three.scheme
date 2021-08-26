@@ -1,0 +1,9 @@
+(define SmallistList3
+  (lambda (pairs)
+    (cond
+      [(null? pairs) '()]
+      [else (let ([first (car pairs)]
+                  [second (car (cdr pairs))]
+                  [third (car (cdr (cdr pairs)))]
+                  [rest (cdr (cdr (cdr pairs)))])
+              (cons (min first second third) (SmallistList3 rest)))])))

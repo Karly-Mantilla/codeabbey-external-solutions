@@ -1,0 +1,16 @@
+let get_max subList =
+  Printf.printf "%i " (List.hd subList)
+
+let splitting line =
+  (Str.split (Str.regexp "[ \t]+") line)
+
+let maybe_read_line () =
+  try Some (read_line ())
+  with End_of_file -> None
+
+let rec loop acc =
+  match maybe_read_line () with
+  | Some (line) -> loop (acc @ [(List.sort compare (List.map int_of_string (splitting line)))])
+  | None -> List.iter get_max (List.tl acc)
+
+let () = loop []
