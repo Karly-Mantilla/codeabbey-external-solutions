@@ -1,0 +1,49 @@
+
+let printList r = List.iter (Printf.printf "%s ") r;;
+
+let values = read_line () ;;
+let strlist = Str.split (Str.regexp "[ ]+") values ;;
+
+let isOperation n = if n = "add" || n = "sub" || n = "mul" || n = "div" || n = "mod" || n = "sqrt" then
+                        true
+                    else
+                        false;;
+
+
+let operation n op1 op2 = let r = ref 0 in
+                        if n = "add" then
+                            r := op1 + op2;
+                        if n ="sub" then
+                            r := op1 - op2;
+                        if n = "mul" then
+                            r := op1 * op2;
+                        if n = "div" then
+                            r:= op1 / op2;
+                        if n = "mod" then
+                            r := op1 mod op2;
+                        !r;;
+
+let st = Stack.create ();;
+for i = 0 to (List.length strlist) - 1 do
+    let v = List.nth strlist i in
+    let op1 = ref 0 in
+    let op2 = ref 0 in
+    if (isOperation v) then
+    (
+        if v = "sqrt" then
+        (
+            op1 := Stack.pop st;
+            let result =sqrt (float (!op1))in
+            Stack.push (int_of_float (result)) st
+        )
+        else(
+            op1 := Stack.pop st;
+            op2 := Stack.pop st;
+            let result = operation v !op2 !op1  in
+            Stack.push result st
+            )
+    )
+    else  Stack.push (int_of_string (v)) st;
+done;
+let res = Stack.pop st in
+Printf.printf "%d\n" res;;

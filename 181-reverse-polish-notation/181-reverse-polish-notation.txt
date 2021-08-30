@@ -1,0 +1,40 @@
+OPEN "c:\qb64\cabby\p181.txt" FOR OUTPUT AS #1
+DIM r(100) AS DOUBLE
+DO
+    READ a$
+    SELECT CASE a$
+        CASE IS = "add"
+            GOSUB pull
+            r(p) = n1 + n2
+        CASE IS = "sub"
+            GOSUB pull
+            r(p) = n1 - n2
+        CASE IS = "mul"
+            GOSUB pull
+            r(p) = n1 * n2
+        CASE IS = "div"
+            GOSUB pull
+            r(p) = n1 / n2
+        CASE IS = "mod"
+            GOSUB pull
+            r(p) = n1 MOD n2
+        CASE IS = "sqrt"
+            n1 = r(p)
+            r(p) = SQR(n1)
+        CASE ELSE
+            p = p + 1
+            r(p) = VAL(a$)
+    END SELECT
+LOOP UNTIL a$ = "xxx"
+
+PRINT #1, r(p - 1)
+CLOSE: END
+
+pull:
+n1 = r(p - 1)
+n2 = r(p)
+p = p - 1
+RETURN
+
+
+DATA 509,161,add,11252,1973,mod,add,16,7,sub,sqrt,mul,189,10,5,div,mul,12,5,sub,20,10,div,sub,mul,add,3401,150,add,3,mul,1420,mod,4,28,196,sqrt,div,sub,mul,mod,225,sqrt,162,18,div,sub,196,sqrt,49,sqrt,div,sub,53,add,3,div,div,42436,sqrt,add,6895,1438,mod,17,101,add,add,531,113,158,add,sub,mod,360,add,537,81,add,1714,435,mod,sub,278,54,sub,123,23,add,sub,mod,16,17,10,sub,sub,256,sqrt,20,10,sub,sub,sub,mul,mod,344,204,sub,3014,628,mod,add,622,2,mul,320,add,add,1638,add,sqrt,sub,317,152,25,add,12,7,sub,mul,114,mod,399,81,add,40,24,sub,div,44,22,sub,22,10,sub,sub,div,add,mod,15,30,add,458,233,sub,add,950,5,div,45,sub,sub,385,7,div,54,29,sub,112,8,div,sub,div,mul,sqrt,add,add,sub,465,210,59,29,sub,3,div,div,63,7,mul,sqrt,11,25,add,57,35,sub,sub,sub,div,mul,33,48,676,sqrt,sub,sub,49,209,11,div,12,add,sub,20,25,13,sub,sub,350,14,div,sqrt,sub,div,sub,div,764,136,add,sqrt,10,div,793,176,add,50,96,add,mod,233,add,add,47,3421,612,mod,sqrt,sub,525,7,div,42,sub,2926,11,div,196,sqrt,div,sub,div,mul,224,567,338,sub,48,5,sub,add,3094,13,div,196,sqrt,div,div,div,252,9,div,4,2,sub,mul,621,9,div,91,58,sub,sub,sub,10,div,div,div,add,22,4028,add,33,15,sub,div,5,mul,2,mul,59,17,mul,26,9,sub,div,1024,sqrt,sub,20,17,4,sub,133,19,div,sub,sub,sub,mul,16749,15422,3,mul,5522,7,mul,add,add,17776,2773,234,add,640,mod,add,mod,28121,4319,mod,mod,add,sqrt,add,add,xxx
