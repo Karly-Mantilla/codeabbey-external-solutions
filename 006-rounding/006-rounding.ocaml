@@ -1,0 +1,19 @@
+let round n d = floor ((n /. d) +. 0.5 );;
+
+let read_lines inputs =
+  let rec read_lines' inputs acc =
+    if inputs = 0 then acc
+    else read_lines' (inputs - 1) (read_line () :: acc) in
+  read_lines' inputs [];;
+
+exception TooManyElements of string
+
+let rounding_div x =
+  match String.split_on_char ' ' x |> List.map float_of_string with
+  | n::d::_ -> round n d
+  | _ -> raise (TooManyElements "");;
+
+let () =
+  let inputs = read_line () |> int_of_string in
+  read_lines inputs |> List.map rounding_div |> List.rev |> List.map int_of_float |> List.iter (Printf.printf "%d ");
+  print_newline ()

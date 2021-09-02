@@ -1,0 +1,18 @@
+(define RoundList
+  (lambda (list)
+    (cond
+      [(null? list) '()]
+      [else (let([first (car list)]
+                  [second (car (cdr list))]
+                  [rest (cdr (cdr list))])
+                 (cons (CommonRounding (/ first second)) (RoundList rest)))])))
+
+(define DecimalOnly
+  (lambda (number)
+    (- number (truncate number))))
+    
+(define CommonRounding
+  (lambda (number)
+    (cond
+      [(= .5 (DecimalOnly number)) (+ (truncate number) 1)]
+      (else (round number)) )))
