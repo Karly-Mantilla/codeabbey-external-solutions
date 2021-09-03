@@ -1,0 +1,1 @@
+print scalar(reverse(<STDIN>));

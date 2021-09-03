@@ -1,0 +1,19 @@
+let rev bs =
+  let swap i j =
+    let b = Bytes.get bs i in
+    Bytes.set bs i (Bytes.get bs j);
+    Bytes.set bs j b in
+  let rec loop i j =
+    if i < j
+    then begin
+      swap i j;
+      loop (i+1) (j-1)
+    end else bs in
+  loop 0 (Bytes.length bs - 1)
+
+let () =
+  read_line ()
+  |> Bytes.of_string
+  |> rev 
+  |> Bytes.to_string
+  |> Printf.printf "%s\n"

@@ -1,0 +1,10 @@
+(define StringReverse
+  (λ (list)
+   (letrec ([internal (λ (list accumulator)
+    (cond
+      [(str-null? list) accumulator]
+      (else (let* ([first (str-car list)]
+                   [rest (str-cdr list)]
+                   [flipped (str-cons first accumulator)])
+              (internal rest flipped)))))])
+                   (internal list ""))))
