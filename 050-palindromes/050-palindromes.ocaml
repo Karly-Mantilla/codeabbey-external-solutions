@@ -1,0 +1,26 @@
+let is_palindrome s =
+  let is_not_special = function
+    | 'a' .. 'z' | 'A' .. 'Z' -> true
+    | _ -> false in
+  let rec is_palindrome' s l r =
+    if l >= r then true (* we've ran out of chars to check *)
+    else if s.[l] != s.[r] then false
+    else is_palindrome' s (l+1) (r-1)
+  in
+  let stripped = String.to_seq s |> Seq.filter is_not_special |> String.of_seq |> String.lowercase_ascii in
+  is_palindrome' stripped 0 ((String.length stripped)-1);;
+
+let read_lines lines =
+  let rec read_lines' lines acc =
+    match lines with
+    | 0 -> List.rev acc
+    | _ -> read_lines' (lines-1) (read_line () :: acc)
+  in
+  read_lines' lines [];;
+
+let () =
+  let lines = read_line () |> int_of_string in
+  read_lines lines
+    |> List.map (fun s -> match is_palindrome s with | true -> "Y" | false -> "N")
+    |> List.iter (Printf.printf "%s ");
+  print_newline ()
