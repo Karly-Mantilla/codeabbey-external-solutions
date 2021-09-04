@@ -1,0 +1,36 @@
+let read str = 
+  let moves = ref [] in
+  let ic = Scanf.Scanning.from_string str in
+  try while true do
+      Scanf.bscanf ic "%d " (fun n -> moves := n::!moves)
+    done;
+    List.rev !moves
+  with End_of_file -> List.rev !moves
+
+let winning grid c =
+  List.exists
+    (fun loi -> List.for_all (fun i -> grid.(i) = c) loi)
+    [[0;1;2]; [3;4;5]; [6;7;8]; [0;3;6]; [1;4;7]; [2;5;8]; [0;4;8]; [2;4;6]]
+
+let eval grid lom = 
+  let rec loop i = function
+    | [] -> 0
+    | m::ms -> begin
+        let c = if i mod 2 = 1 then 'X' else 'O' in
+        grid.(m-1) <- c;
+        if winning grid c
+        then i
+        else loop (i+1) ms
+      end in
+  loop 1 lom
+
+let grid () = Array.make 9 ' '
+
+let () =
+  Scanf.scanf "%d " (fun n ->
+                      for i = 0 to n - 1 do
+                        Scanf.scanf "%s@\n" read |> eval (grid ()) |> Printf.printf "%d "
+                      done)
+
+
+
