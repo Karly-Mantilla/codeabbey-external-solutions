@@ -1,0 +1,246 @@
+/* To compile the file, a project is required
+   $ bsb -init richardalmanza -theme basic-reason && \
+   npm link bs-platform --prefix richardalmanza && \
+   cp richardalmanza.re richardalmanza/src/ && \
+   npm run build --prefix richardalmanza
+
+   # I ommited the output of the first three commands
+   > richardalmanza@0.1.0 build _/training/code/codeabbey/091/richardalmanza
+   > bsb -make-world
+
+   [7/7] Building src/richardalmanza-Richardalmanza.cmj
+   */
+
+let fluid = Sys.argv->Array.length < 3;
+let split_1 = [%re "/[: \\n\\r]/g"];
+
+let str_to_i = (n: string) => Pervasives.int_of_string(n);
+let str_to_f = (n: string) => Pervasives.float_of_string(n);
+let i_to_str = (n: int) => Pervasives.string_of_int(n);
+let chr_to_str = (c: char) => String.make(1, c);
+
+let print_i = (n: int) => Pervasives.print_string(i_to_str(n) ++ " ");
+let endl = () => Pervasives.print_string("\n");
+
+let rec each_line =
+        (~arr_f=[||], f: array('a) => array('b), arr: array('a), len_line) => {
+  let len = arr->Array.length;
+
+  if (len > 0) {
+    let new_arr_f = arr_f->Array.append(arr->Array.sub(0, len_line)->f);
+
+    each_line(
+      ~arr_f=new_arr_f,
+      f,
+      arr->Array.sub(len_line, len - len_line),
+      len_line,
+    );
+  } else {
+    arr_f;
+  };
+};
+
+let prepare_args = (data: string, splitter: Js.Re.t) => {
+  each_line(
+    x =>
+      switch (x[0]) {
+      | None => [||]
+      | Some("") => [||]
+      | Some(str) => [|str|]
+      },
+    Js.String.splitByRe(splitter, data),
+    1,
+  );
+};
+
+let read_data = (filename: string) => {
+  filename->Node.Fs.readFileAsUtf8Sync->prepare_args(split_1);
+};
+
+let prepare_data = (arr: array(string)) => {
+  let a = arr->Array.sub(0, 16);
+  each_line(x => [|x[0]->str_to_i|], a, 1);
+};
+
+let prepare_data_2 = (arr: array(string)) => {
+  let len = arr->Array.length;
+  arr->Array.sub(16, len - 16);
+};
+
+let rec reverse = (~new_arr=[||], arr: array('a)) => {
+  let len_a = arr->Array.length;
+
+  if (len_a > 0) {
+    let new_a = new_arr->Array.append(arr->Array.sub(len_a - 1, 1));
+    arr->Array.sub(0, len_a - 1) |> reverse(~new_arr=new_a);
+  } else {
+    new_arr;
+  };
+};
+
+let rec in_index = (~i=0, f: 'a => bool, arr: array('a)) => {
+  let len_s = arr->Array.length;
+
+  if (len_s > 0) {
+    if (arr[0]->f) {
+      (true, i);
+    } else {
+      arr->Array.sub(1, len_s - 1) |> in_index(~i=i + 1, f);
+    };
+  } else {
+    (false, (-1));
+  };
+};
+
+let in_a = (to_find: 'a, arr: array('a)) => {
+  let (in_arr, _) = in_index(x => x == to_find, arr);
+  in_arr;
+};
+
+let index = (to_find: 'a, arr: array('a)) => {
+  let (_, index_a) = in_index(x => x == to_find, arr);
+  index_a;
+};
+
+let select = (f: 'a => bool, arr: array('a)) =>
+  each_line(x => x[0]->f ? [|x[0]|] : [||], arr, 1);
+
+let reject = (f: 'a => bool, arr: array('a)) => {
+  select(x => !f(x), arr);
+};
+
+let to_1d = (pos_2d: array(int), d_r: int) => pos_2d[1] * d_r + pos_2d[0];
+let to_2d = (pos_1d: int, d_r: int) => [|pos_1d mod d_r, pos_1d / d_r|];
+
+let rec transpose = (~iter=0, ~tm_1d=[||], m_1d: array('a), d_r) => {
+  let len_m = m_1d->Array.length;
+  let len_tm = tm_1d->Array.length;
+
+  if (len_tm < len_m) {
+    let t_pos_2d =
+      switch (iter->to_2d(d_r)) {
+      | [|x, y|] => [|y, x|]
+      | _ => [|0, 0|]
+      };
+
+    let new_tm = tm_1d->Array.append([|m_1d[t_pos_2d->to_1d(d_r)]|]);
+    transpose(~iter=iter + 1, ~tm_1d=new_tm, m_1d, d_r);
+  } else {
+    tm_1d;
+  };
+};
+
+let gravity = (arr: array('a), void: 'a) => {
+  let len = arr->Array.length;
+
+  let arr_1 = arr |> reject(x => x == void);
+  let len_1 = arr_1->Array.length;
+
+  arr_1->Array.append((len - len_1)->Array.make(void));
+};
+
+let rec sum_tiles_sub = (~iter=0, ~arr_f=[||], arr: array(int), d_r) =>
+  if (iter + 1 < d_r) {
+    let len = arr->Array.length;
+
+    let eq_ = arr[0] == arr[1];
+
+    let new_arr_f =
+      eq_
+        ? arr_f->Array.append([|arr[0] + arr[1], 0|])
+        : arr_f->Array.append([|arr[0]|]);
+    let step = eq_ ? 2 : 1;
+
+    let new_arr = arr->Array.sub(step, len - step);
+    let new_iter = iter + step;
+
+    sum_tiles_sub(~iter=new_iter, ~arr_f=new_arr_f, new_arr, d_r);
+  } else if (arr->Array.length > 0) {
+    arr_f->Array.append([|arr[0]|])->gravity(0);
+  } else {
+    arr_f->gravity(0);
+  };
+
+let sum_tiles = (m_1d: array(int), d_r) => {
+  each_line(x => x->gravity(0)->sum_tiles_sub(d_r), m_1d, d_r);
+};
+
+let bender = (game: array(int), d_r: int, f_1, f_2) => {
+  let a = game->f_1;
+  let b = each_line(x => x->f_2, a, d_r);
+  let c = b->sum_tiles(d_r);
+  let d = each_line(x => x->f_2, c, d_r);
+  let e = d->f_1;
+  e;
+};
+
+let m_1d_to_2d = (arr: array('a), d_r: int) =>
+  each_line(x => [|x|], arr, d_r);
+
+let print_game = (game: array('a), d_r) => {
+  let _ = each_line(x => [|x->Js.log|], game->m_1d_to_2d(d_r), 1);
+  endl();
+};
+
+let count = (game: array('a)) => {
+  let f = (i: int, _) =>
+    (2.0 ** (i->Pervasives.float +. 1.0))->Pervasives.int_of_float;
+  let a = Array.mapi(f, Array.make(5, 0));
+  let counters =
+    each_line(x => [|(game |> select(y => y == x[0]))->Array.length|], a, 1);
+
+  let (_, i) = counters->reverse |> in_index(x => x > 0);
+
+  counters->Array.sub(0, 5 - i) |> Array.iter(x => x->print_i);
+};
+
+let rec play = (game: array(int), move: array('a), d_r) => {
+  let len = move->Array.length;
+
+  if (len > 0) {
+    let new_game =
+      switch (move[0]) {
+      | "D" => bender(game, d_r, x => x->transpose(d_r), x => x->reverse)
+      | "U" => bender(game, d_r, x => x->transpose(d_r), x => x)
+      | "L" => bender(game, d_r, x => x, x => x)
+      | "R" => bender(game, d_r, x => x, x => x->reverse)
+      | _ => [||]
+      };
+
+    play(new_game, move->Array.sub(1, len - 1), d_r);
+  } else {
+    game;
+  };
+};
+
+let args =
+  if (fluid) {
+    read_data("DATA.lst");
+  } else {
+    prepare_args(Sys.argv[2], split_1);
+  };
+
+let game = args->prepare_data;
+let moves = args->prepare_data_2;
+
+game->print_game(4);
+let end_game = play(game, moves, 4);
+end_game->print_game(4);
+end_game->count;
+
+endl();
+
+/*
+ $ nodejs richardalmanza/src/richardalmanza.bs.js
+ [ [ 2, 4, 4, 4 ] ]
+ [ [ 2, 4, 4, 2 ] ]
+ [ [ 2, 2, 2, 4 ] ]
+ [ [ 2, 2, 2, 2 ] ]
+
+ [ [ 4, 0, 0, 0 ] ]
+ [ [ 2, 0, 0, 0 ] ]
+ [ [ 4, 16, 4, 0 ] ]
+ [ [ 8, 4, 2, 0 ] ]
+
+ 2 4 1 1
+ */

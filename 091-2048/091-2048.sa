@@ -1,0 +1,36 @@
+import Data.List
+
+
+data Move = U | D | L | R deriving (Show, Read, Eq)
+
+
+-- Squash a row or column (toward the front of the list)
+squash :: [Int] -> [Int]
+squash line = take 4 $ f (filter (/=0) line) ++ repeat 0 where
+  f [] = []
+  f [x] = [x]
+  f (a:b:xs) | a == b    = a * 2 : f xs
+             | otherwise = a : f (b:xs)
+
+
+move :: [[Int]] -> Move -> [[Int]]
+move grid U = transpose . map squash . transpose $ grid
+move grid D = reverse . transpose . map squash . transpose . reverse $ grid
+move grid L = map squash grid
+move grid R = map (reverse . squash . reverse) grid
+
+
+answer :: [[Int]] -> [Move] -> String
+answer grid moves = unwords $ map show counts where
+
+  counts = [ length . filter (==n) $ final
+           | n <- takeWhile (<= maximum final) $ map (2^) [1..]]
+
+  final = concat $ foldl' move grid moves
+
+
+main = interact $ \input ->
+  let il = lines input in
+  answer [[read x | x <- words row] | row <- init il]
+         [read m | m <- words $ last il]
+  ++ "\n"
