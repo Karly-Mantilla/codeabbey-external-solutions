@@ -1,0 +1,3 @@
+vowelcount [] = 0
+vowelcount (x:xs) | elem x "auioye" = 1 + (vowelcount xs)
+ | otherwise = vowelcount xs 

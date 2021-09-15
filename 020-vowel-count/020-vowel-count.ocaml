@@ -1,0 +1,23 @@
+module CharSet = Set.Make(struct
+    type t = char
+    let compare = compare
+  end);;
+
+let set_of vs =
+  Seq.fold_left (fun x y -> CharSet.add y x) CharSet.empty (String.to_seq vs);;
+
+let vowels vs s =
+  String.to_seq s |> List.of_seq |> List.filter (fun c -> CharSet.mem c vs) |> List.length;;
+
+let read_lines lines =
+  let rec read_lines' line acc =
+    if line = 0 then acc
+    else read_lines' (line-1) (read_line () :: acc)
+  in
+  read_lines' lines [] |> List.rev;;
+
+let () =
+  let lines = read_line () |> int_of_string in
+  let vs = set_of "aouiey" in
+  read_lines lines |> List.map (vowels vs) |> List.iter (Printf.printf "%d ");
+  print_newline ();

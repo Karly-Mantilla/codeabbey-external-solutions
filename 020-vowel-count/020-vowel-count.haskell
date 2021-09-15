@@ -1,0 +1,10 @@
+-- Haskell
+
+countVowels str = foldl (\acc x -> if x `elem` ['a', 'e', 'i', 'o', 'u', 'y'] then acc + 1 else acc) 0 str
+
+-- main template for input on multiple lines, where the first line tells you how many more there are
+main_mult = do
+       n <- getLine
+       input <- getContents
+       let output = take (read n :: Int) $ map countVowels $ lines input
+       putStrLn $ unwords $ map show output
