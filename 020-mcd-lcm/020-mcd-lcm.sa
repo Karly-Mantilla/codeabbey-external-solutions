@@ -1,0 +1,12 @@
+my_gcd a b
+    | a == b = a
+    | a > b  = my_gcd (a-b) b
+    | a < b  = my_gcd a (b-a)
+
+my_lcm a b = a * b `div` (my_gcd a b)
+
+calculate :: [Int] -> [Int]
+calculate (a:b:[]) = (my_gcd a b : my_lcm a b : [])
+
+main = do 
+    putStrLn =<< fmap (unwords . map(\a -> "(" ++ a ++ ")") . map(unwords . map(show) . calculate . map(read) . words) . drop 1 . lines) getContents
