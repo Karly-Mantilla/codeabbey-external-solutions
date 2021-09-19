@@ -1,0 +1,15 @@
+data Stock = Stock {name :: String, mean :: Double, stdDev :: Double} deriving Show
+
+commissionPercentAndFactor = 4.0
+
+parseLine s = Stock (head(words s)) (average(values s)) (stddev(values s))
+    where 
+        average z = (sum z) / (len z)
+        stddev z  = sqrt(sum (map (\x -> (x - (average z)) ** 2) z) / len(z))
+        len z = fromIntegral(length z)        
+        values z = map read (tail(words z)) 
+        
+volatileStocks s = filter (\x -> stdDev x >= (mean x) * commissionPercentAndFactor / 100.0) s
+
+main = do
+    putStrLn =<< fmap (unwords . map name . volatileStocks . map parseLine . tail . lines) getContents

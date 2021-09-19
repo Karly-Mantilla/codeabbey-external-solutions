@@ -1,0 +1,42 @@
+Module Module1
+
+    Sub Main()
+        Dim str As String = ""
+        For j As Integer = 0 To Console.ReadLine - 1
+            Dim tmp() As String = Console.ReadLine.Split(" ")
+            Dim name As String = tmp(0)
+            Dim arr(tmp.Length - 2) As String
+            For i As Integer = 1 To tmp.Length - 1
+                arr(i - 1) = tmp(i)
+            Next
+
+            Dim mean As Double = 0
+            For i As Integer = 0 To arr.Length - 1
+                mean += CDbl(arr(i))
+            Next
+            mean /= arr.Length
+            Dim arr1(arr.Length - 1) As String
+            For i As Integer = 0 To arr1.Length - 1
+                arr1(i) = (mean - CDbl(arr(i))) ^ 2
+            Next
+            Dim Dmean As Double
+            For i As Integer = 0 To arr1.Length - 1
+                Dmean += CDbl(arr1(i))
+            Next
+            Dmean = Dmean / arr1.Length
+            If Math.Sqrt(Dmean) >= (4 * (0.01 * mean)) Then
+                str &= name & " "
+            End If
+            '   Console.WriteLine(Dmean ^ 0.5)
+            '  Console.WriteLine(4 * 0.01 * mean)
+            Dmean = 0
+            mean = 0
+
+        Next
+        Dim file As System.IO.StreamWriter
+        file = My.Computer.FileSystem.OpenTextFileWriter("U:\Visual Studio 2010\Comission.txt", True)
+        file.WriteLine(str)
+        file.Close
+        Console.ReadLine()
+    End Sub
+End Module
