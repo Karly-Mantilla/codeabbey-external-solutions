@@ -1,0 +1,14 @@
+data Values = Values {mean :: Float, maxVal :: Int, minVal :: Int} deriving Show
+
+analyzeVector s = Values average (maximum r) (minimum r)
+  where 
+    average = fromIntegral(sum(r)) / fromIntegral(length r)
+    r = filter (>0) $ map read (words s)
+    
+calculateDice v = show dice ++ "d" ++ show numDices
+  where 
+    numDices = minVal v
+    diceMean = mean v / fromIntegral numDices
+    dice     = round((diceMean * 2.0 - 1.0) / 2.0) * 2
+    
+main = putStrLn =<< fmap(unwords . map (calculateDice . analyzeVector) . lines) getContents    
