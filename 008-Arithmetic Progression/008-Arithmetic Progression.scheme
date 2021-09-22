@@ -1,0 +1,19 @@
+(define ArithProgr
+  (lambda (constant increment count)
+    (cond
+      [(zero? count) '()]
+      (else (cons constant
+                  (ArithProgr (+ constant increment)
+                              increment
+                              (- count 1)))))))
+
+(define TripleAdder
+  (lambda (Triples)
+    (cond
+      [(null? Triples) '()]
+      [else (let ([first (car Triples)]
+                  [second (car (cdr Triples))]
+                  [third (car (cdr (cdr Triples)))]
+                  [rest (cdr (cdr (cdr Triples)))])
+              (cons (apply + (ArithProgr first second third))
+                    (TripleAdder rest)))])))

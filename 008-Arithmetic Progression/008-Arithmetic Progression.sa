@@ -1,0 +1,9 @@
+arithmetic_progression = do
+    input <- getContents
+    print . unwords . map (show . prog . map(read :: String -> Int) . words) . drop 1 $ lines $ input
+    where
+        prog [start, step, count]
+            | count == 0    = 0
+            | otherwise     = start + prog [(start + step), step, (count - 1)]
+
+main = arithmetic_progression
