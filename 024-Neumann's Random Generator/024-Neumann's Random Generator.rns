@@ -1,0 +1,55 @@
+/*
+$ npm run build
+
+> reasonml@0.1.0 build
+  C:\Users\Daniel\Desktop\Challenges\Programming-challenges\reasonml
+> bsb -make-world
+
+bsb: no work to do.
+[4/4] Building src\slayfer1112-Reasonml.cmj
+*/
+
+let file: string = Node.Fs.readFileSync("./src/DATA.lst",`utf8);
+
+let data = Js.String.split("\r\n",file);
+
+let head = Array.sub(data,0,1)
+let body = Array.sub(data,1,Array.length(data)-2);
+
+let start = 0;
+let n = Array.length(body) - 1;
+
+let value = ref([||]);
+
+for (x in start to n) {
+  value := Array.append(value^,Js.String.split(" ",body[x]));
+}
+
+let neumann = (text) => {
+  let text = ref(text)
+  let array = ref([||])
+  let counter = ref(0)
+  while (List.length(List.filter(i => i==text^, Array.to_list(array^))) == 0){
+    counter := counter^ + 1
+    array := Array.append(array^,[|text^ |])
+    let number = int_of_string(text^);
+    let pow2 = number * number;
+    text := string_of_int(pow2);
+    while (String.length(text^) <= 8) {
+      text := "0" ++ text^;
+    }
+    let arr = ref(Js.String.split("",text^));
+    arr := Array.sub(arr^,3,4);
+    text := Js.Array.joinWith("",arr^)
+  }
+  string_of_int(counter^)
+}
+let result = ref("");
+Array.iter( i => result := result^ ++ " " ++ neumann(i) , value^ )
+result := String.sub(result^,1,String.length(result^)-1)
+Js.log(result^)
+
+/*
+$ node src/slayfer1112.bs.js
+106 111 97 101 98 98 105 98 110 100 101
+*/

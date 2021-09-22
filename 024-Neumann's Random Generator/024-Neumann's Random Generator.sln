@@ -1,0 +1,39 @@
+Option Strict On
+Imports System
+Public Class Form1
+    Private Sub ButCalc_Click(sender As Object, e As EventArgs) Handles ButCalc.Click
+        Dim value As Integer
+        Dim counter As Integer
+        Dim before As String
+        Dim begin As Integer
+        Dim temp As String
+        Dim sub5 As Integer
+
+        Dim stringArray() As String = Split(TextBox1.Text)
+
+        For Each item In stringArray
+            Integer.TryParse(item, value)
+            begin = value + 1
+            counter = 0
+            Dim Last5() As String = {"0", "0", "0", "0", "0"}
+            Do Until value = begin Or Last5.Contains(before)
+                If counter = 0 Then
+                    begin -= 1
+                End If
+                Do While sub5 > 4
+                    sub5 -= 5
+                Loop
+                Last5(sub5) = value.ToString
+                value *= value
+                temp = value.ToString("D8")
+                Dim charArray As Char() = temp.ToCharArray
+                temp = charArray(2) & charArray(3) & charArray(4) & charArray(5)
+                Integer.TryParse(temp, value)
+                counter += 1
+                sub5 = counter
+                before = value.ToString
+            Loop
+            TextBox2.Text += counter.ToString & " "
+        Next
+    End Sub
+End Class

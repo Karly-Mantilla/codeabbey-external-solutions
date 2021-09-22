@@ -1,0 +1,14 @@
+iterToCycle :: Integer -> Int
+iterToCycle = go []
+  where
+    go xs n = if n `elem` xs 
+                  then length xs
+                  else go (n : xs) n'
+                    where
+                      n' = (n * n `div` 100) `mod` 10000
+
+main :: IO ()
+main = do line <- getLine
+          line <- getLine
+          let list = map (read :: String -> Integer) $ words line
+          putStrLn $ unwords $ map (show . iterToCycle) $ list
