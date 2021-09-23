@@ -1,0 +1,19 @@
+import Data.Char
+
+canTake (aF:aR:' ':bF:bR:[]) | af == bf = "Y"
+                | ar == br = "Y"
+                | ar - af == br - bf = "Y"
+                | 8 - ar - af == 8 - br - bf = "Y"
+                | otherwise = "N"
+               where af = ord aF - 96
+                    bf = ord bF - 96
+                 ar = read [aR]
+                 br = read [bR]
+
+
+p53 =  do
+    getLine
+    x <- getContents
+    putStrLn $ concat $ intersperse " " $ map (canTake) $ lines x
+    
+main = p53

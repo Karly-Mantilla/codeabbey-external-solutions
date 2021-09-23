@@ -1,0 +1,31 @@
+let explode s =
+  let rec exp i l =
+    if i < 0 then l
+    else if s.[i] = ' '
+      then exp (i - 1) l
+    else exp (i - 1) (s.[i] :: l) in
+  exp (String.length s - 1) []
+
+let maybe_read_line () =
+  try Some (read_line ())
+  with End_of_file -> None
+
+let rec get_data acc =
+  match maybe_read_line () with
+  | Some (line) -> get_data (acc @ [(explode line)])
+  | None -> (List.tl acc)
+
+let validation item =
+  match item with
+  | a::b::c::d::[] -> if a == c || b == d then Printf.printf "%s " "Y"
+                      else if abs (int_of_char d - int_of_char b) ==
+                              abs ((Char.code c - 96) - (Char.code a - 96))
+                        then Printf.printf "%s " "Y"
+                      else Printf.printf "%s " "N"
+  | _ -> ()
+
+let main () =
+  let data = get_data [] in
+    List.iter validation data
+
+let () = main ()

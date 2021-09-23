@@ -1,0 +1,51 @@
+Sub fifty_three()   'øàõìàòû
+
+Dim N, k As Byte
+Dim posk, posq As String
+
+Sheets("53").Activate
+With Sheets("53")
+        
+    N = Cells(1, 1).Value
+        
+    For i = 1 To N
+        posk = Cells(i + 1, 1).Value
+        posq = Cells(i + 1, 2).Value
+        If Mid(posk, 1, 1) Like Mid(posq, 1, 1) Then
+            Cells(4 + N, i).Value = "Y"
+            GoTo Ex
+        End If
+        If Mid(posk, 2, 1) Like Mid(posq, 2, 1) Then
+            Cells(4 + N, i).Value = "Y"
+            GoTo Ex
+        End If
+        If Asc(Mid(posk, 1, 1)) - Val(Mid(posk, 2, 1)) = _
+            Asc(Mid(posq, 1, 1)) - Val(Mid(posq, 2, 1)) Then
+            Cells(4 + N, i).Value = "Y"
+            GoTo Ex
+        End If
+        k = 0
+        Do
+            If Asc(Mid(posk, 1, 1)) + k = Asc(Mid(posq, 1, 1)) And _
+                Val(Mid(posk, 2, 1)) - k = Val(Mid(posq, 2, 1)) Then
+                Cells(4 + N, i).Value = "Y"
+                GoTo Ex
+            End If
+            k = k + 1
+        Loop Until Val(Mid(posk, 2, 1)) - k = 0
+        k = 0
+        Do
+            If Asc(Mid(posk, 1, 1)) - k = Asc(Mid(posq, 1, 1)) And _
+                Val(Mid(posk, 2, 1)) + k = Val(Mid(posq, 2, 1)) Then
+                Cells(4 + N, i).Value = "Y"
+                GoTo Ex
+            End If
+            k = k + 1
+        Loop Until Val(Mid(posk, 2, 1)) - k = 0
+        Cells(4 + N, i).Value = "N"
+Ex:
+    Next i
+       
+End With
+
+End Sub
