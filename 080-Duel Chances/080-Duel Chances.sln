@@ -1,0 +1,3 @@
+For i = 2 To 31
+    Range("D" & i) = 1 / (1 + Range("B" & i) / Range("A" & i) * (1 - Range("A" & i)))
+Next

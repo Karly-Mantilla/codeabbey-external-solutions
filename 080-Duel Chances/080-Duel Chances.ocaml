@@ -1,0 +1,11 @@
+let prop a b =
+  let pa = float_of_int a /. 100.0 in
+  let pb = float_of_int b /. 100.0 in
+  let p = (1.0 -. pa) *. (1.0 -. pb) in
+  pa /. (1.0 -. p) *. 100.0 +. 0.5 |> truncate
+
+let () =
+  Scanf.scanf "%d " (fun n ->
+                      for i = 0 to n - 1 do
+                        Scanf.scanf "%d %d " prop |> Printf.printf "%d "
+                      done)
