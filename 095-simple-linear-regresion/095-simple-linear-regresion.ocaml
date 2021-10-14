@@ -1,0 +1,42 @@
+let extract a b =    
+    let out= ref [ ] in
+       for i=0 to (List.length a) -1     do        
+                  let act=List.nth a (i) in
+                    let f= List.nth act (b) in
+                    out := f::(!out)
+             done;
+   !out        ;;
+let rec sum l=
+   match l with
+   []->0
+   |h::t-> h+ (sum t);;
+let rec insert l i =
+        match l with
+    [] -> [i]
+      | h :: t -> h :: (insert t i);;
+let pot b =
+    List.map (fun x -> x*x) b;;
+let multmat inpx inpy =
+      let out= ref []    in        
+            for i=0 to (List.length inpx) -1     do            
+                    let f=((List.nth inpx (i))*(List.nth inpy (i))) in
+                    out := f::(!out)
+            done;
+        !out    ;;
+        
+
+    let inp=[[89;316];[127;347];[60;273];[129;403];[100;345];[110;377];[125;383];[130;408];[118;374];[96;347];[95;413];[127;421];[145;400];[121;399];[84;312];[57;275];[50;234];[74;286];[60;316];[76;288];[144;398];[140;409];[126;382];[72;289];[143;442];[139;439];[97;311];[107;282];[56;252];[142;431];[86;317];[129;399];[147;477];[150;441];[117;378];[98;271];[52;240];[56;252];[87;314];[115;446];[84;314];[140;424];[60;263];[139;422];[149;421];[122;389];[66;271];[82;302];[94;308];[112;362];[62;282];[139;432];[132;390];[115;361];[112;377];[115;369];[113;362];[53;267];[94;328];[143;453];[89;265];[69;309];[62;279];[63;264];[73;332];[57;264];[63;265];[96;331];[59;246];[93;316]] in
+    let x = extract inp 0 in
+    let y= extract inp 1 in
+    let xy=float_of_int( sum (multmat x y)) in
+    let xt=float_of_int( sum x) in
+    let yt=float_of_int( sum y) in
+    let xp=float_of_int( sum (pot x)) in
+    let n= float_of_int( List.length x) in
+    let m=(xy-.((xt*.yt)/.(n)))/.(xp-.((xt*.xt)/.(n))) in
+     let mx= xt/.n in
+    let my= yt/.n in
+    let inter= my-.(m*.mx) in
+     print_float m;
+     print_string " ";
+     print_float inter;

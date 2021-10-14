@@ -1,0 +1,10 @@
+linear_regression inputs = (slope, intercept)
+  where
+    len = fromIntegral $ length inputs
+    x_mean = sum (map fst $ inputs) / len
+    y_mean = sum (map snd $ inputs) / len
+    slope = (sum (map(\(x,y) -> (x-x_mean) * (y - y_mean)) inputs)) / (sum (map(\(x,_) -> (x - x_mean) ^ 2) inputs))
+    intercept = y_mean - slope * x_mean
+
+main = do
+  putStrLn =<< fmap (show . linear_regression . map(\[_,x,y] -> (read x, read y)) . map(words) . tail . lines) getContents

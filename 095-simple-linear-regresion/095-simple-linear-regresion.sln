@@ -1,0 +1,38 @@
+Sub Main
+
+    Dim input = <![CDATA[
+1932: 131 345
+...
+2003: 56 191
+]]>.Value()
+    
+    dim xdata = new list(of double)
+    dim ydata = new list(of double)
+    
+    ' Read data points
+    Dim lines = input.Trim.Split(Microsoft.VisualBasic.vbLf)
+    for each line in lines
+        dim tokens = line.split(" "c).tolist
+        xdata.add(cdbl(tokens(1)))
+        ydata.add(cdbl(tokens(2)))        
+    next
+
+    dim xavg = xdata.average
+    dim yavg = ydata.average
+
+    dim v1 = 0R
+    dim v2 = 0R
+
+     for i = 0 to xdata.count-1
+        v1 += (xdata(i) - xAvg) * (ydata(i) - yAvg)
+        v2 += Math.Pow(xdata(i) - xAvg, 2)
+    next
+    
+    dim a = v1 / v2
+    dim b = yavg - a * xavg
+
+    dim ans = a & " " & b
+    ans.dump
+    
+End Sub
+

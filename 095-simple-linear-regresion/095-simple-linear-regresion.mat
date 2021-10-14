@@ -1,0 +1,5 @@
+MyData <- read.csv(file="/home/wintermute/Dropbox/Coding/RCode/test1.csv", header = TRUE, sep=" ")
+reg1 <- lm(MyData$Price ~ MyData$Rain)
+print(reg1$coefficients)
+plot(MyData$Rain, MyData$Price,xlab = "Price", ylab = "Rainy Days")
+abline(reg1)
