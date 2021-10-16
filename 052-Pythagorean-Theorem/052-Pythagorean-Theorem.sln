@@ -1,0 +1,60 @@
+Option Strict On
+Option Explicit On
+
+Imports System.IO
+Imports System.Configuration
+Imports System.Text
+
+'Problem 52: Determine if a triangle is Right, Acute or Obtuse
+Module Problem52
+
+    Sub Main()
+        Const prob_no As Integer = 52
+        Dim path As String = ConfigurationManager.AppSettings("FilePath") & prob_no.ToString & ".txt"
+        Dim sr As StreamReader = New StreamReader(path)
+
+
+        Dim numOfEntries As String = sr.ReadLine
+        Dim line As String = String.Empty
+        Dim results As String = String.Empty
+        sr.Peek()
+
+        While sr.Peek >= 0
+            line = sr.ReadLine
+            results &= check_triangle(line)
+        End While
+
+
+        results = results.Trim(" "c)
+
+        Console.WriteLine("Answer: " & results)
+        Console.ReadLine()
+
+    End Sub
+
+    Public Function check_triangle(ByVal txt As String) As String
+        Dim temp() As String = txt.Split(" "c)
+        Dim res As String = String.Empty
+
+        Dim a As Integer = CInt(temp(0))
+        Dim b As Integer = CInt(temp(1))
+        Dim c As Integer = CInt(temp(2))
+
+        'bigger value always the last in input data lines
+        If c ^ 2 = (a ^ 2) + (b ^ 2) Then
+            'right triangle
+            res = "R" & " "
+        ElseIf c ^ 2 < (a ^ 2) + (b ^ 2) Then
+            'acute triangle
+            res = "A" & " "
+        Else
+            'obtuse triangle
+            res = "O" & " "
+        End If
+
+        Return res
+
+    End Function
+
+
+End Module

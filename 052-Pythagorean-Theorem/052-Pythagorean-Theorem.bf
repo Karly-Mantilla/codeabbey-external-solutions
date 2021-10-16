@@ -1,0 +1,1 @@
+https://www.codeabbey.com/index/task_solution?task=pythagorean-theorem&user=thearsonist&lang=Brainfuck

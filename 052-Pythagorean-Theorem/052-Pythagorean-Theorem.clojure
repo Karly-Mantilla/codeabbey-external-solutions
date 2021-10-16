@@ -1,0 +1,51 @@
+(defpackage #:codeabbey.pythagorean-theorem
+  (:use #:cl)
+  (:export #:solve))
+(in-package #:codeabbey.pythagorean-theorem)
+
+(defparameter *input*
+  "26
+612 255 663
+612 255 696
+511 1752 1825
+320 240 383
+153 204 285
+264 110 266
+350 1200 1250
+189 648 674
+1656 483 1724
+125 300 340
+1020 544 1084
+1020 425 1080
+45 108 117
+104 78 143
+435 232 535
+105 360 374
+1800 525 1946
+456 190 481
+567 1944 1967
+388 291 437
+648 270 745
+300 720 765
+795 424 870
+390 936 1090
+189 252 334
+948 395 1027
+")
+
+(defun triangle (a b c)
+  (let ((aa+bb (+ (* a a) (* b b)))
+        (cc (* c c)))
+    (cond ((= aa+bb cc) #\R)
+          ((< aa+bb cc) #\O)
+          (t #\A))))
+
+(defun solve ()
+  (with-input-from-string (s *input*)
+    (loop with n = (read s)
+          repeat n
+          for a = (read s)
+          for b = (read s)
+          for c = (read s)
+          collect (triangle a b c) into answers
+          finally (format t "~{~A~^ ~}~%" answers))))
