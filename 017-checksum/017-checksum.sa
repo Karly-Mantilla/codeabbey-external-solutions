@@ -1,0 +1,14 @@
+open System
+open System.IO
+
+open CodeAbbeyLib.CodeAbbeySimple
+
+[<EntryPoint>]
+let main argv =           
+    let checksum state v = ((state + v)*113L)%10000007L
+    File.ReadAllLines("codeAbbeyIn.txt").[1]
+    |> lineToNumArray Int64.Parse
+    |> Array.fold checksum 0L
+    |> printfn "%d"
+    Console.ReadKey() |> ignore
+    0 
