@@ -1,0 +1,8 @@
+(def testinput [4 196828241 6718 882 716 5609 5758749 1446 943700 4302 7 691505938 21460433 45585 8 9990160 74 564 5423 72452 785 926 7082])
+
+(defn step [x y] (mod (*' 113 (+' x y)) 10000007))
+
+(defn solve [xs]
+  (reduce step 0 xs))
+
+(println (solve testinput))
