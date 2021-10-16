@@ -1,0 +1,5 @@
+n=list(map(int,input().split()))
+f=[]
+for i in range(len(n)):
+    f.append(round(((n[i]-32)*5)/9))
+print(*f[1:])
