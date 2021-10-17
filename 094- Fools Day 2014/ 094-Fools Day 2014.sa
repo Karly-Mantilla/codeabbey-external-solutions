@@ -1,0 +1,3 @@
+
+foolsday [] = 0
+foolsday (x:xs) = (x^2) + (foolsday xs)

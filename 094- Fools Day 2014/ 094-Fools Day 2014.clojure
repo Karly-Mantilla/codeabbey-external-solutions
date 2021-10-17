@@ -1,0 +1,19 @@
+'''
+Created on 28/05/2020
+
+@author: User
+'''
+from getpass import _raw_input
+
+if __name__ == '__main__':
+    casos = int(_raw_input())
+    respuesta = list()
+    for i in range(0,casos):
+        datos = list(map(int,_raw_input().split(" ")))
+        total= 0
+        for j in datos:
+            total += j*j
+        respuesta.append(total)
+        
+    print(*respuesta)
+    pass

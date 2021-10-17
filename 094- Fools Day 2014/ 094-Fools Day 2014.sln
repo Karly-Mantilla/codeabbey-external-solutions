@@ -1,0 +1,16 @@
+Module Module1
+
+    Sub Main()
+        Dim str As String = ""
+        Dim sum As Integer
+        For i As Integer = 0 To Console.ReadLine - 1
+            Dim arr() As String = Console.ReadLine.Split(" ")
+            For j As Integer = 0 To arr.Length - 1
+                sum += Math.Pow(CInt(arr(j)), 2)
+            Next
+            str &= sum & " "
+            sum = 0
+        Next
+        Console.WriteLine(str)
+        Console.ReadLine()
+    End Sub
