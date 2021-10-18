@@ -1,0 +1,24 @@
+let t =(Scanf.scanf "%d\n"(fun t ->  t));;
+
+let printArray r = Array.iter (Printf.printf "%d ") r;;
+
+let pi = 4.0 *. atan 1.0;;
+let deg_to_rad n =  let r = ref 0.0 in
+                    r := (n *. pi) /. 180.0;
+                    !r;;
+
+let roundf x = floor (x +. 0.5);;
+
+let result = Array.make t 0;;
+for i=0 to t - 1 do
+    let values = read_line () in
+    let floatList = List.map float_of_string(Str.split (Str.regexp " ") values) in
+    let d =  List.nth floatList 0 in
+    let b = List.nth floatList 1 in
+    let a = 180.0 -. 90.0 -. (180.0 -. b) in
+    let h = d *. tan (deg_to_rad a) in
+    let r = int_of_float (roundf h) in
+    result.(i) <- r
+done;;
+
+printArray result;;

@@ -1,0 +1,39 @@
+(defpackage #:codeabbey.tree-height-measurement
+  (:use #:cl)
+  (:export #:solve))
+(in-package #:codeabbey.tree-height-measurement)
+
+(defparameter *input*
+  "17
+31 132.089
+61 116.940
+34 136.637
+95 120.069
+160 106.040
+71 104.982
+28 136.005
+58 133.995
+110 109.983
+17 138.180
+34 135.830
+185 105.986
+47 116.075
+70 111.092
+60 118.811
+26 124.695
+45 118.072
+")
+
+(defun to-radian (degrees) (/ (* pi degrees) 180))
+
+(defun measure (d b)
+  (let ((a (- (to-radian b) (/ pi 2))))
+    (* d (tan a))))
+
+(defun solve ()
+  (with-input-from-string (s *input*)
+    (loop repeat (read s)
+          for d = (read s)
+          for b = (read s)
+          collect (round (measure d b)) into answers
+          finally (format t "~{~A~^ ~}~%" answers))))
